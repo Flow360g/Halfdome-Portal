@@ -5,6 +5,7 @@
  */
 
 :root {
+  --shell-bar: 0px;
   --nav-w-open: 280px;
   --nav-w-closed: 88px;
   --nav-pad: 16px;
@@ -487,7 +488,15 @@
   display: none;
 }
 
+/* Page-level sticky bars (the hub's header, the calendar filters) sit under the phone top bar. */
+.shell .site-header {
+  top: var(--shell-bar);
+}
+
 @media (width <= 960px) {
+  :root {
+    --shell-bar: 61px;
+  }
   .shell,
   .shell[data-collapsed='true'] {
     grid-template-columns: minmax(0, 1fr);
@@ -582,5 +591,12 @@
   .sidenav__list li,
   .navtoday__bar span {
     animation: none;
+  }
+}
+
+/* On phones the shell's top bar already names the portal; the hub's bar only stays if it carries Ask the hub. */
+@media (width <= 600px) {
+  .shell .site-header:not(:has(.site-header__ask)) {
+    display: none;
   }
 }

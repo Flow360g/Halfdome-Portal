@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { fmtMedium, isoWeek, localToday, parts, dayOf, trimester } from '../calendar/dates';
 import { DOME, LOGO } from './brand';
 import { NAV_ITEMS, type NavItem } from './navItems';
@@ -74,6 +74,8 @@ export function SideNav({ collapsed, onToggle, onClose, mode }: Props) {
 }
 
 function NavEntry({ item, collapsed }: { item: NavItem; collapsed: boolean }) {
+  const { pathname } = useLocation();
+  const active = item.matches ? item.matches(pathname) : pathname === item.to;
   const inner = (
     <>
       <span className="navitem__icon">
@@ -111,14 +113,15 @@ function NavEntry({ item, collapsed }: { item: NavItem; collapsed: boolean }) {
     );
   }
   return (
-    <NavLink
-      className="navitem"
+    <Link
+      className={active ? 'navitem active' : 'navitem'}
       to={item.to ?? '/'}
+      aria-current={active ? 'page' : undefined}
       data-tip={collapsed ? item.label : undefined}
       aria-label={collapsed ? item.label : undefined}
     >
       {inner}
-    </NavLink>
+    </Link>
   );
 }
 

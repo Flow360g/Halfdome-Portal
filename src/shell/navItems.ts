@@ -9,13 +9,9 @@ export interface NavItem {
   to?: string;
   /** Somewhere outside the app, opened in a new tab. */
   href?: string;
+  /** Which paths count as this page, for the "you are here" state. */
+  matches?: (pathname: string) => boolean;
 }
-
-/*
- * The People hub is being built on its own branch. Until it merges into this app it links to
- * its published preview; once merged, swap `href` for `to: '/'`.
- */
-export const PEOPLE_HUB_PREVIEW_URL = 'https://claude.ai/artifact/1NxKeUmL5rqKKev2aYodZV';
 
 export const NAV_ITEMS: NavItem[] = [
   {
@@ -23,7 +19,9 @@ export const NAV_ITEMS: NavItem[] = [
     label: 'People hub',
     description: 'Policies, pay and leave',
     icon: NAV_ICONS.people,
-    href: PEOPLE_HUB_PREVIEW_URL,
+    to: '/',
+    // The hub owns "/" and every topic page under it.
+    matches: (path) => path === '/' || path.startsWith('/topics'),
   },
   {
     id: 'calendar',
@@ -31,5 +29,6 @@ export const NAV_ITEMS: NavItem[] = [
     description: 'Dates and rhythms, 2026',
     icon: NAV_ICONS.calendar,
     to: '/calendar',
+    matches: (path) => path.startsWith('/calendar'),
   },
 ];

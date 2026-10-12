@@ -26,7 +26,6 @@
   --on-industry: var(--ink);
 
   --hatch: repeating-linear-gradient(135deg, var(--hairline) 0 1.5px, transparent 1.5px 7px);
-  --filterbar-top: 0px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -421,7 +420,7 @@ div.cal-rise {
 
 .filterbar {
   position: sticky;
-  top: var(--filterbar-top);
+  top: var(--shell-bar, 0px);
   z-index: 30;
   background: var(--surface);
   border-bottom: var(--stroke-hairline) solid var(--hairline);
@@ -2287,9 +2286,6 @@ div.cal-rise {
 }
 
 @media (width <= 960px) {
-  :root {
-    --filterbar-top: 61px;
-  }
   .explorer {
     scroll-margin-top: 150px;
   }
