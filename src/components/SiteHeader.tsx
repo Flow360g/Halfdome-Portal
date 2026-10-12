@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import { askHubConfigured } from '../lib/askHub';
+import { AskHubButton } from './AskHub';
 import { Logo } from './brand/Logo';
 
 export function SiteHeader() {
@@ -15,9 +17,13 @@ export function SiteHeader() {
           <Link to={{ pathname: '/', hash: '#quick-links' }}>Quick links</Link>
           <Link to="/topics/hiring-and-onboarding/your-first-90-days">New starters</Link>
         </nav>
-        <Link to="/topics/our-team/who-to-ask-for-what" className="hd-btn hd-btn-secondary hd-btn-sm site-header__cta">
-          Ask People and Culture
-        </Link>
+        {askHubConfigured ? (
+          <AskHubButton className="site-header__cta site-header__ask" />
+        ) : (
+          <Link to="/topics/our-team/who-to-ask-for-what" className="hd-btn hd-btn-secondary hd-btn-sm site-header__cta">
+            Ask People and Culture
+          </Link>
+        )}
       </div>
     </header>
   );

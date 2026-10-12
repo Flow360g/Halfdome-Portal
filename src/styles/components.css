@@ -94,3 +94,64 @@
   display: block;
   width: auto;
 }
+
+/* Stat tile */
+.hd-stat {
+  padding: var(--space-6);
+  border-radius: var(--radius-md);
+  background: var(--surface-alt);
+}
+.hd-stat-emphasis {
+  background: var(--sequoia);
+  color: var(--snow);
+}
+.hd-stat-label {
+  margin: 0 0 var(--space-2);
+  font: 700 13px/16px var(--font-sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.hd-stat-emphasis .hd-stat-label {
+  color: var(--snow);
+  opacity: 0.85;
+}
+.hd-stat-value {
+  margin: 0;
+  font: 800 56px/1 var(--font-sans);
+  letter-spacing: -0.02em;
+}
+
+/* Table */
+.hd-table {
+  width: 100%;
+  border-collapse: collapse;
+  font: 400 15px/22px var(--font-sans);
+}
+.hd-table th {
+  text-align: left;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 2px solid var(--ink);
+  vertical-align: bottom;
+}
+.hd-table td {
+  padding: var(--space-3);
+  border-bottom: var(--stroke-hairline) solid var(--hairline);
+  vertical-align: top;
+}
+.hd-table tbody tr:hover td {
+  background: var(--surface-alt);
+}
+
+/* Value colours used as text, display only */
+.hd-tone-red {
+  color: var(--sequoia);
+}
+.hd-tone-ink {
+  color: var(--ink);
+}

@@ -2,40 +2,117 @@
 
 The home for everything people and culture at Half Dome: policies, pay, leave, learning and how we work, in one place.
 
-This first version is the **dashboard**: every topic and the pages inside it, with search, quick links and a path for new starters. Topic and page links open holding pages for now; the content page design comes next.
+What's here so far:
+
+- **The dashboard:** every topic and page, with search, quick links, What's new and a path for new starters.
+- **Content pages** in three templates (guide, policy and story) plus the new starter journey. Six pages are written so far, from the People and Culture documents in SharePoint.
+- **Tools inside pages:** a leave planner, a public holiday countdown, a Whole Potential Days tracker and the first 90 days checklist.
+- **Trust signals:** each page shows its owner, when it was updated and its source document, and asks "Was this page helpful?".
+- **Ask the hub:** questions answered in plain English from hub pages only, with links to the pages used.
+
+Pages without content yet show a holding page that links to the original SharePoint document where there is one.
 
 ## Run it
 
 ```bash
 npm install
 npm run dev            # local dev server
-npm run build          # typecheck and production build to dist/
+npm test               # unit tests (date logic)
+npm run build          # content index, typecheck and production build to dist/
 npm run build:preview  # one self-contained HTML file at dist-artifact/people-hub.html
 ```
+
+Copy `.env.example` to `.env.local` to connect Supabase. Without it, feedback stays in the browser and Ask the hub is hidden.
+
+## Writing a page
+
+1. Make sure the page is listed in `src/content/hub.ts` (topic, title, kind, keywords and its SharePoint `source`).
+2. Add `src/content/pages/<topic>/<page>.mdx`:
+
+```mdx
+---
+summary: One or two sentences people see under the title.
+updated: 2026-10-12
+source: leavePolicy          # optional, a key from src/content/sources.ts
+related:
+  - leave-and-flexibility/types-of-leave
+template: guide              # optional: guide, policy, story or journey
+---
+
+<ShortVersion>
+
+- The three to five facts most people came for.
+
+</ShortVersion>
+
+## A section heading
+
+Plain Markdown, plus any of the blocks below.
+```
+
+3. Add a line to `src/content/changelog.ts` so it appears in What's new.
+4. Run `npm run build` (it regenerates the Ask the hub content), then redeploy the `ask-hub` function.
+
+Blocks you can use without importing anything:
+
+| Block | Use it for |
+| --- | --- |
+| `<ShortVersion>`, `<AtAGlance>` | The answer first |
+| `<Steps>` with `<Step title="">` | A process in order |
+| `<Callout title="" tone="important">` | Something people mustn't miss |
+| `<Faq>` with `<Question q="">` | Questions people ask |
+| `<KeyNumbers>` with `<KeyNumber value="" label="" note="" emphasis />` | Headline entitlements |
+| `<Timeline>` with `<TimelineItem when="" title="">` | Dates in order |
+| `<PolicySection title="">` | Full policy wording, closed by default |
+| `<Values>` with `<Value name="" statement="">` | Story pages about the values |
+| `<Quote by="">`, `<Statement>` | Pull quotes and statements |
+| `<WhoToAsk>`, `<DocumentLink source="">` | Contacts and source documents |
+| `<LeavePlanner />`, `<NextPublicHoliday />`, `<WholePotentialDays />`, `<JourneyChecklist />` | The interactive tools |
+
+Write in Australian English, sentence case, and don't use em dashes.
 
 ## Where things live
 
 | Path | What it is |
 | --- | --- |
-| `src/content/hub.ts` | The table of contents: topics, pages, quick links and popular searches. Edit this to add or rename pages. |
-| `src/content/search.ts` | Search ranking (titles first, then keywords, then the topic name). |
-| `src/pages/Dashboard.tsx` | The dashboard. |
-| `src/pages/TopicPage.tsx` | Holding pages for topics and pages until content is written. |
-| `src/components/` | Header, footer, search, quick links, new starter panel and topic cards. |
-| `src/components/brand/` | Logo, illustrated icons and the Whole Potential.™ lock-up, switched to the right colourway per theme. |
-| `src/styles/tokens.css` | Half Dome design system tokens (colour, type, spacing, radius) as CSS variables. |
-| `src/assets/` | Brand fonts, marks, icons and imagery, exported from the Half Dome design system. |
+| `src/content/hub.ts` | The table of contents: topics, pages, quick links and popular searches. |
+| `src/content/pages/` | Page content, one MDX file per page. |
+| `src/content/sources.ts` | The SharePoint documents pages are written from. |
+| `src/content/public-holidays-vic.ts` | Victorian public holidays. Add the next year each spring. |
+| `src/content/journey.ts` | The first 90 days checklist. |
+| `src/content/changelog.ts` | What's new. |
+| `src/templates/` | Guide, policy, story and journey layouts and their shared parts. |
+| `src/components/blocks/` | The MDX blocks. |
+| `src/components/tools/` | Leave planner, holiday countdown, Whole Potential Days tracker, journey checklist. |
+| `src/lib/dates.ts` | Working days, notice periods and trimesters (tested in `dates.test.ts`). |
+| `src/styles/tokens.css` | Half Dome design system tokens as CSS variables. |
+| `scripts/build-content-index.mjs` | Builds the text Ask the hub answers from, and page text for search. |
+| `supabase/functions/ask-hub/` | The Ask the hub function (OpenRouter). |
+| `supabase/migrations/` | The `page_feedback` table. |
 
-### Adding a page
+## Ask the hub and feedback (Supabase)
 
-Add an entry to the right topic in `src/content/hub.ts`:
+1. Apply `supabase/migrations/*_page_feedback.sql`. Anyone can add feedback; nobody can read it through the public API. People and Culture reads it in the Supabase dashboard.
+2. Set the function's secrets:
+   - `OPENROUTER_API_KEY`
+   - `OPENROUTER_MODEL`, the OpenRouter model slug (for example a Claude Sonnet model)
+   - `ALLOWED_ORIGINS`, the hub's address
+3. Deploy the function: `supabase functions deploy ask-hub`.
+4. Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` for the hub build.
 
-```ts
-{ slug: 'sabbaticals', title: 'Sabbaticals', kind: 'policy', keywords: ['long break', 'career break'] },
-```
+The assistant's rules live in `src/content/ask-hub-instructions.ts`. It answers only from hub content, cites its sources, never guesses entitlements and points to HiBob or People and Culture for anything personal.
 
-`kind` is `guide`, `policy`, `form` or `template`. Anything other than a guide gets a label on the dashboard. `keywords` are extra words people might search for.
+Before the hub is shared beyond a private preview, put it behind Microsoft sign-in and require a signed-in user on the function. Pages include the salary brackets and internal policies.
 
 ## Design
 
-Built on the Half Dome design system: Plus Jakarta Sans and Libre Baskerville, the five brand colours at full strength, one accent per theme (sequoia on light, white fir on dark), illustrated brand icons in the matching colourway, one brand image on one shape, and no shadows or gradients. Light and dark themes follow the device setting.
+The hub is built on the Half Dome design system:
+
+- Plus Jakarta Sans and Libre Baskerville.
+- The five brand colours at full strength, with one accent per theme: sequoia on light, white fir on dark.
+- Illustrated brand icons in the matching colourway.
+- One brand image on one shape.
+- Chalk arrows used sparingly.
+- No shadows or gradients.
+
+Light and dark themes follow the device setting.

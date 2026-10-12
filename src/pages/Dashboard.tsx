@@ -5,6 +5,7 @@ import { HubSearch } from '../components/HubSearch';
 import { NewStarterCard } from '../components/NewStarterCard';
 import { QuickLinks } from '../components/QuickLinks';
 import { TopicCard } from '../components/TopicCard';
+import { WhatsNew } from '../components/WhatsNew';
 import { pageCount, topics } from '../content/hub';
 import { searchPages } from '../content/search';
 
@@ -69,6 +70,12 @@ export function Dashboard() {
         <QuickLinks />
         <NewStarterCard />
       </div>
+
+      {!searching && (
+        <div className="container">
+          <WhatsNew />
+        </div>
+      )}
 
       <section className="container topics" id="topics" ref={topicsRef} aria-labelledby="topics-title">
         <header className="topics__head">

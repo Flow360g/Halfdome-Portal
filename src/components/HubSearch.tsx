@@ -2,6 +2,8 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { KIND_LABEL, pageCount, pagePath, popularSearches } from '../content/hub';
 import type { SearchResult } from '../content/search';
+import { askHubConfigured } from '../lib/askHub';
+import { useAskHub } from './AskHub';
 
 const MAX_SUGGESTIONS = 6;
 
@@ -16,6 +18,7 @@ interface HubSearchProps {
 /** The hero search: a combobox that suggests pages as you type. */
 export function HubSearch({ query, results, onQueryChange, onShowAll }: HubSearchProps) {
   const navigate = useNavigate();
+  const { open: openAsk } = useAskHub();
   const inputRef = useRef<HTMLInputElement>(null);
   const listId = useId();
   const [open, setOpen] = useState(false);
@@ -141,10 +144,19 @@ export function HubSearch({ query, results, onQueryChange, onShowAll }: HubSearc
           </>
         ) : (
           <p id={listId} className="hub-search__empty" role="status">
-            Nothing matches “{query.trim()}” yet. Try another word, or ask People and Culture.
+            Nothing matches “{query.trim()}” yet. Try another word{askHubConfigured ? ', or ask the hub in your own words' : ', or ask People and Culture'}.
           </p>
         )}
       </div>
+
+      {askHubConfigured && (
+        <button type="button" className="hub-search__ask" onClick={() => openAsk(query)}>
+          <span>Or ask the hub a question in your own words</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 12h13M13 6l6 6-6 6" />
+          </svg>
+        </button>
+      )}
 
       <div className="hub-search__popular">
         <span className="hub-search__popular-label">Popular</span>

@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
+import { AskHubProvider } from './components/AskHub';
 import { SiteFooter } from './components/SiteFooter';
 import { SiteHeader } from './components/SiteHeader';
 import { Dashboard } from './pages/Dashboard';
@@ -22,7 +23,7 @@ function ScrollManager() {
 
 export function App() {
   return (
-    <>
+    <AskHubProvider>
       <a className="skip-link" href="#main">
         Skip to content
       </a>
@@ -35,6 +36,6 @@ export function App() {
         <Route path="*" element={<TopicPage />} />
       </Routes>
       <SiteFooter />
-    </>
+    </AskHubProvider>
   );
 }

@@ -1,4 +1,7 @@
+import pageText from '../generated/search-text.json';
 import { topics, type HubPage, type HubTopic } from './hub';
+
+const bodyText = pageText as Record<string, string>;
 
 export interface SearchResult {
   topic: HubTopic;
@@ -29,6 +32,7 @@ function scorePage(topic: HubTopic, page: HubPage, words: string[], phrase: stri
   const title = normalise(page.title);
   const keywords = (page.keywords ?? []).map(normalise);
   const topicTitle = normalise(topic.title);
+  const body = bodyText[`${topic.slug}/${page.slug}`] ?? '';
   let score = 0;
 
   for (const word of words) {
@@ -36,6 +40,7 @@ function scorePage(topic: HubTopic, page: HubPage, words: string[], phrase: stri
     if (hasWordStarting(title, word)) score += 6;
     else if (keywordHits > 0) score += 3;
     else if (hasWordStarting(topicTitle, word)) score += 1;
+    else if (word.length > 2 && (body.includes(` ${word}`) || body.startsWith(word))) score += 1;
     else return 0;
     // Pages whose keywords keep coming back to the word are usually the main page for it.
     score += Math.min(keywordHits, 3);

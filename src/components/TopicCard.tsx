@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { KIND_LABEL, pagePath, topicPath, type HubPage, type HubTopic } from '../content/hub';
+import { recentChanges } from '../content/changelog';
+import { todayInMelbourne } from '../lib/dates';
 import { BrandIcon } from './brand/BrandIcon';
 
 interface TopicCardProps {
@@ -18,6 +20,7 @@ export function TopicCard({ topic, pages = topic.pages }: TopicCardProps) {
     ? `${pages.length} of ${topic.pages.length} pages`
     : `${topic.pages.length} pages`;
   const listId = `${topic.slug}-pages`;
+  const recent = recentChanges(todayInMelbourne());
 
   return (
     <article
@@ -40,7 +43,12 @@ export function TopicCard({ topic, pages = topic.pages }: TopicCardProps) {
           <li key={page.slug}>
             <Link to={pagePath(topic.slug, page.slug)} className="topic-card__page">
               <span className="topic-card__page-title">{page.title}</span>
-              {page.kind !== 'guide' && <span className="hd-pill hd-pill-neutral">{KIND_LABEL[page.kind]}</span>}
+              <span className="topic-card__tags">
+                {recent.has(`${topic.slug}/${page.slug}`) && (
+                  <span className="hd-pill topic-card__new">{recent.get(`${topic.slug}/${page.slug}`) === 'new' ? 'New' : 'Updated'}</span>
+                )}
+                {page.kind !== 'guide' && <span className="hd-pill hd-pill-neutral">{KIND_LABEL[page.kind]}</span>}
+              </span>
             </Link>
           </li>
         ))}

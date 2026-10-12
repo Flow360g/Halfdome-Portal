@@ -22,8 +22,10 @@ export function SiteFooter() {
         <div className="site-footer__base">
           <Logo height={22} />
           <p className="site-footer__acknowledgement">
-            Half Dome acknowledges the Wurundjeri Woi-wurrung people of the Kulin Nation, the Traditional Custodians
-            of the land on which we work in Richmond. We pay our respects to their Elders past and present.
+            At Half Dome, we respectfully acknowledge all First Nation Peoples on the beautiful land upon which we work
+            and thrive, the Wurundjeri people of the Kulin nation. We pay our respects to Elders both past and present
+            and stand together with Indigenous Leaders for today and tomorrow, acknowledging this land was, is and
+            always will be Aboriginal land.
           </p>
           <p className="site-footer__meta">© {new Date().getFullYear()} Half Dome. For Half Domers only.</p>
         </div>

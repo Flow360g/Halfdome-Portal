@@ -8,6 +8,8 @@ import './styles/base.css';
 import './styles/components.css';
 import './styles/layout.css';
 import './styles/dashboard.css';
+import './styles/content.css';
+import './styles/ask.css';
 
 // The single-file preview has no server to route paths, so it keeps the route in the URL hash.
 const Router = import.meta.env.MODE === 'artifact' ? HashRouter : BrowserRouter;

@@ -4,6 +4,8 @@
  * pages here; slugs become URLs, so change them with care once a page is live.
  */
 
+import type { SourceKey } from './sources';
+
 export type IconName =
   | 'flag'
   | 'team'
@@ -25,6 +27,8 @@ export interface HubPage {
   slug: string;
   title: string;
   kind: PageKind;
+  /** The SharePoint document this page is written from, when there is one. */
+  source?: SourceKey;
   /** Extra words people might search for, such as synonyms and acronyms. */
   keywords?: string[];
 }
@@ -51,9 +55,9 @@ export const topics: HubTopic[] = [
     summary: 'Why we exist, where we are heading and what we value.',
     icon: 'flag',
     pages: [
-      { slug: 'why-we-exist', title: 'Why we exist', kind: 'guide', keywords: ['purpose', 'mission', 'whole potential'] },
-      { slug: 'our-values', title: 'Our values', kind: 'guide', keywords: ['constantly curious', 'stay classy', 'love mondays', 'blow things up'] },
-      { slug: 'our-story', title: 'Our story', kind: 'guide', keywords: ['history', 'founders', 'yosemite', 'why half dome'] },
+      { slug: 'why-we-exist', title: 'Why we exist', kind: 'guide', source: 'guideToHalfDome', keywords: ['purpose', 'mission', 'whole potential', 'challengers'] },
+      { slug: 'our-values', title: 'Our values', kind: 'guide', source: 'guideToHalfDome', keywords: ['constantly curious', 'stay classy', 'love mondays', 'blow things up'] },
+      { slug: 'our-story', title: 'Our story', kind: 'guide', source: 'guideToHalfDome', keywords: ['history', 'founders', 'joe', 'tom', 'will', 'yosemite', 'why half dome'] },
       { slug: 'strategy-and-okrs', title: 'Strategy and OKRs', kind: 'guide', keywords: ['goals', 'objectives', 'key results', 'plan'] },
       { slug: 'agency-scorecard', title: 'Agency scorecard', kind: 'guide', keywords: ['metrics', 'business performance', 'results'] },
       { slug: 'roadmap', title: 'Roadmap', kind: 'guide', keywords: ['priorities', 'projects'] },
@@ -68,7 +72,7 @@ export const topics: HubTopic[] = [
     pages: [
       { slug: 'org-chart', title: 'Org chart', kind: 'guide', keywords: ['structure', 'reporting lines', 'organisation'] },
       { slug: 'teams-and-what-they-do', title: 'Teams and what they do', kind: 'guide', keywords: ['departments', 'squads', 'media', 'strategy'] },
-      { slug: 'leadership-team', title: 'Leadership team', kind: 'guide', keywords: ['founders', 'directors', 'leaders'] },
+      { slug: 'leadership-team', title: 'Leadership team', kind: 'guide', keywords: ['founders', 'partners', 'directors', 'leaders'] },
       { slug: 'who-to-ask-for-what', title: 'Who to ask for what', kind: 'guide', keywords: ['contacts', 'help', 'people and culture', 'hr'] },
       { slug: 'team-readmes', title: 'Team ReadMes', kind: 'guide', keywords: ['working styles', 'user manual'] },
       { slug: 'write-your-ways-of-working', title: 'Write your ways of working', kind: 'template', keywords: ['readme', 'user manual', 'working style'] },
@@ -81,27 +85,28 @@ export const topics: HubTopic[] = [
     icon: 'teapot',
     pages: [
       { slug: 'how-we-work', title: 'How we work', kind: 'guide', keywords: ['ways of working', 'culture'] },
+      { slug: 'how-we-communicate', title: 'How we communicate', kind: 'guide', source: 'communicationGuide', keywords: ['slack', 'email', 'response times', 'hibob shoutouts', 'status'] },
+      { slug: 'meetings-that-work', title: 'Meetings that work', kind: 'guide', source: 'meetingsGuide', keywords: ['agenda', 'effective meetings'] },
       { slug: 'our-weekly-rhythm', title: 'Our weekly rhythm', kind: 'guide', keywords: ['wip', 'stand-up', 'meeting schedule'] },
-      { slug: 'meetings-that-work', title: 'Meetings that work', kind: 'guide', keywords: ['agenda', 'effective meetings'] },
-      { slug: 'the-tools-we-use', title: 'The tools we use', kind: 'guide', keywords: ['software', 'slack', 'teams', 'monday', 'apps'] },
-      { slug: 'async-and-documentation', title: 'Async and documentation', kind: 'guide', keywords: ['asynchronous', 'writing things down'] },
+      { slug: 'the-tools-we-use', title: 'The tools we use', kind: 'guide', keywords: ['software', 'slack', 'hibob', 'monday', 'apps'] },
       { slug: 'giving-and-receiving-feedback', title: 'Giving and receiving feedback', kind: 'guide', keywords: ['feedback', 'difficult conversations'] },
       { slug: 'dress-code', title: 'Dress code', kind: 'policy', keywords: ['clothes', 'what to wear'] },
-      { slug: 'socials-and-off-sites', title: 'Socials and off-sites', kind: 'guide', keywords: ['events', 'parties', 'christmas party', 'fun'] },
+      { slug: 'socials-and-off-sites', title: 'Socials and off-sites', kind: 'guide', keywords: ['events', 'parties', 'christmas party', 'culture committee'] },
     ],
   },
   {
     slug: 'pay-and-recognition',
     title: 'Pay and recognition',
-    summary: 'How pay works, when you are paid and how we recognise great work.',
+    summary: 'How pay works, how it is reviewed and how we recognise great work.',
     icon: 'revenue',
     pages: [
-      { slug: 'remuneration-framework', title: 'Remuneration framework', kind: 'policy', keywords: ['salary', 'salary bands', 'compensation', 'pay'] },
-      { slug: 'pay-reviews', title: 'Pay reviews', kind: 'guide', keywords: ['salary review', 'pay rise', 'increase'] },
+      { slug: 'remuneration-and-benefits', title: 'Remuneration and benefits', kind: 'policy', source: 'remunerationPolicy', keywords: ['salary', 'compensation', 'pay equity', 'pay'] },
+      { slug: 'salary-brackets', title: 'Salary brackets', kind: 'guide', source: 'remunerationPolicy', keywords: ['salary bands', 'pay transparency', 'levels'] },
+      { slug: 'pay-reviews', title: 'Pay reviews', kind: 'guide', source: 'remunerationPolicy', keywords: ['salary review', 'june', 'december', 'pay rise'] },
       { slug: 'payroll-dates-and-payslips', title: 'Payroll dates and payslips', kind: 'guide', keywords: ['payday', 'pay cycle', 'payslip', 'when do i get paid'] },
       { slug: 'superannuation', title: 'Superannuation', kind: 'guide', keywords: ['super', 'retirement', 'super fund'] },
-      { slug: 'expenses-and-reimbursements', title: 'Expenses and reimbursements', kind: 'form', keywords: ['receipts', 'claims', 'expense claim', 'reimbursement'] },
-      { slug: 'recognition-and-awards', title: 'Recognition and awards', kind: 'guide', keywords: ['shout-outs', 'kudos', 'awards'] },
+      { slug: 'expenses-and-reimbursements', title: 'Expenses and reimbursements', kind: 'policy', source: 'expensesPolicy', keywords: ['receipts', 'claims', 'expense claim', 'reimbursement', 'travel'] },
+      { slug: 'recognition-and-awards', title: 'Recognition and awards', kind: 'guide', keywords: ['shoutouts', 'kudos', 'awards'] },
     ],
   },
   {
@@ -110,11 +115,10 @@ export const topics: HubTopic[] = [
     summary: 'The extras that come with working here and how to use them.',
     icon: 'present',
     pages: [
-      { slug: 'benefits-at-a-glance', title: 'Benefits at a glance', kind: 'guide', keywords: ['perks', 'benefits'] },
-      { slug: 'wellbeing-benefits', title: 'Wellbeing benefits', kind: 'guide', keywords: ['gym', 'health', 'fitness'] },
-      { slug: 'tech-and-equipment', title: 'Tech and equipment', kind: 'guide', keywords: ['laptop', 'computer', 'monitor', 'it'] },
-      { slug: 'partner-discounts', title: 'Partner discounts', kind: 'guide', keywords: ['offers', 'deals', 'discount'] },
-      { slug: 'milestones-and-celebrations', title: 'Milestones and celebrations', kind: 'guide', keywords: ['birthday', 'work anniversary', 'celebrate'] },
+      { slug: 'benefits-at-a-glance', title: 'Benefits at a glance', kind: 'guide', source: 'remunerationPolicy', keywords: ['perks', 'free lunch fridays', 'snacks', 'coffee', 'merch'] },
+      { slug: 'the-three-keys', title: 'The Three Keys', kind: 'guide', source: 'remunerationPolicy', keywords: ['journey key', 'wellness key', 'growth key', 'work perks', 'trimester'] },
+      { slug: 'tech-and-equipment', title: 'Tech and equipment', kind: 'guide', keywords: ['laptop', 'computer', 'monitor', 'hardware'] },
+      { slug: 'milestones-and-celebrations', title: 'Milestones and celebrations', kind: 'guide', source: 'remunerationPolicy', keywords: ['birthday', 'work anniversary', 'anniversary bonus', 'celebrate'] },
     ],
   },
   {
@@ -123,13 +127,14 @@ export const topics: HubTopic[] = [
     summary: 'Time off, public holidays and working in a way that suits you.',
     icon: 'calendar',
     pages: [
-      { slug: 'types-of-leave', title: 'Types of leave', kind: 'policy', keywords: ['annual leave', 'personal leave', 'sick leave', "carer's leave", 'compassionate leave', 'long service leave', 'holidays'] },
-      { slug: 'how-to-apply-for-leave', title: 'How to apply for leave', kind: 'guide', keywords: ['annual leave', 'book leave', 'time off', 'holiday', 'request leave'] },
-      { slug: 'public-holidays-in-victoria', title: 'Public holidays in Victoria', kind: 'guide', keywords: ['melbourne cup', 'grand final', 'christmas', 'easter'] },
-      { slug: 'flexible-working', title: 'Flexible working', kind: 'policy', keywords: ['flexibility', 'hours', 'part time', 'compressed week'] },
-      { slug: 'hybrid-working-and-office-days', title: 'Hybrid working and office days', kind: 'guide', keywords: ['wfh', 'work from home', 'remote', 'office', 'richmond'] },
-      { slug: 'working-from-home-setup', title: 'Working from home setup', kind: 'guide', keywords: ['remote', 'ergonomics', 'home office', 'desk'] },
-      { slug: 'working-from-overseas', title: 'Working from overseas', kind: 'policy', keywords: ['travel', 'abroad', 'work remotely'] },
+      { slug: 'types-of-leave', title: 'Types of leave', kind: 'policy', source: 'leavePolicy', keywords: ['annual leave', 'personal leave', 'sick leave', "carer's leave", 'compassionate leave', 'long service leave', 'holidays'] },
+      { slug: 'how-to-apply-for-leave', title: 'How to apply for leave', kind: 'guide', source: 'leavePolicy', keywords: ['annual leave', 'book leave', 'time off', 'holiday', 'request leave', 'hibob'] },
+      { slug: 'whole-potential-days', title: 'Whole Potential Days', kind: 'guide', source: 'wholePotentialDaysGuide', keywords: ['wpd', 'long weekend', 'day off', 'trimester'] },
+      { slug: 'advanced-leave', title: 'Advanced leave', kind: 'policy', source: 'leavePolicy', keywords: ['unlimited leave', 'extra leave', 'negative balance'] },
+      { slug: 'public-holidays', title: 'Public holidays and swaps', kind: 'guide', source: 'leavePolicy', keywords: ['melbourne cup', 'grand final', 'christmas', 'easter', 'swap a public holiday', 'victoria'] },
+      { slug: 'our-working-model', title: 'Our working model (60/40)', kind: 'guide', source: 'remoteWorkingGuide', keywords: ['hybrid', 'wfh', 'work from home', 'remote', 'office', 'richmond'] },
+      { slug: 'flexible-working', title: 'Flexible working', kind: 'policy', keywords: ['flexibility', 'hours', 'part time'] },
+      { slug: 'working-from-overseas', title: 'Working from overseas', kind: 'policy', source: 'remoteWorkingGuide', keywords: ['travel', 'abroad', 'work remotely'] },
     ],
   },
   {
@@ -138,12 +143,12 @@ export const topics: HubTopic[] = [
     summary: 'Build your skills, your craft and your career with us.',
     icon: 'learning',
     pages: [
-      { slug: 'career-framework', title: 'Career framework', kind: 'guide', keywords: ['levels', 'progression', 'career path', 'promotion'] },
+      { slug: 'career-framework', title: 'Career and capability framework', kind: 'guide', keywords: ['levels', 'progression', 'career path', 'capability framework'] },
       { slug: 'one-on-ones', title: 'One-on-ones', kind: 'guide', keywords: ['1:1', '1on1', 'manager catch-up'] },
-      { slug: 'learning-budget', title: 'Learning budget', kind: 'policy', keywords: ['training budget', 'courses', 'conferences', 'study'] },
-      { slug: 'training-library', title: 'Training library', kind: 'guide', keywords: ['courses', 'resources', 'learning'] },
+      { slug: 'learna', title: 'Learna learning platform', kind: 'guide', source: 'remunerationPolicy', keywords: ['courses', 'online learning', 'training library'] },
+      { slug: 'qualifications', title: 'Qualifications (MFA, IMAA, Mini MBA)', kind: 'guide', source: 'remunerationPolicy', keywords: ['study', 'certification', 'mfa', 'imaa', 'mini mba'] },
       { slug: 'platform-certifications', title: 'Platform certifications', kind: 'guide', keywords: ['meta blueprint', 'google skillshop', 'google ads', 'tiktok academy'] },
-      { slug: 'mentoring', title: 'Mentoring', kind: 'guide', keywords: ['mentor', 'buddy', 'coaching'] },
+      { slug: 'coaching-and-mentoring', title: 'Coaching and mentoring', kind: 'guide', source: 'remunerationPolicy', keywords: ['mentor', 'coach', 'uprise'] },
     ],
   },
   {
@@ -152,7 +157,7 @@ export const topics: HubTopic[] = [
     summary: 'How we set goals, check in and recognise growth.',
     icon: 'rating',
     pages: [
-      { slug: 'performance-framework', title: 'Performance framework', kind: 'guide', keywords: ['expectations', 'behaviours'] },
+      { slug: 'performance-framework', title: 'Performance framework', kind: 'guide', keywords: ['expectations', 'behaviours', 'capability'] },
       { slug: 'review-cycle', title: 'Review cycle', kind: 'guide', keywords: ['performance review', 'appraisal', 'timeline'] },
       { slug: 'setting-goals', title: 'Setting goals', kind: 'guide', keywords: ['okrs', 'objectives', 'targets'] },
       { slug: 'check-ins', title: 'Check-ins', kind: 'guide', keywords: ['feedback', 'catch-up', 'progress'] },
@@ -167,12 +172,12 @@ export const topics: HubTopic[] = [
     summary: 'How we find great people and welcome them in.',
     icon: 'handshake',
     pages: [
-      { slug: 'your-first-90-days', title: 'Your first 90 days', kind: 'guide', keywords: ['onboarding', 'new starter', 'induction', 'first week'] },
-      { slug: 'onboarding-checklist', title: 'Onboarding checklist', kind: 'template', keywords: ['new starter', 'setup', 'first day'] },
+      { slug: 'your-first-90-days', title: 'Your first 90 days', kind: 'guide', source: 'guideToHalfDome', keywords: ['onboarding', 'new starter', 'induction', 'first week', 'checklist'] },
+      { slug: 'buddy-program', title: 'Buddy Program', kind: 'guide', source: 'buddyProgramGuide', keywords: ['buddy', 'new starter', 'onboarding'] },
       { slug: 'how-we-hire', title: 'How we hire', kind: 'guide', keywords: ['recruitment', 'hiring'] },
       { slug: 'interview-process', title: 'Interview process', kind: 'guide', keywords: ['interviews', 'interviewing', 'candidates'] },
-      { slug: 'referral-programme', title: 'Referral programme', kind: 'policy', keywords: ['refer a friend', 'referral bonus'] },
-      { slug: 'probation', title: 'Probation', kind: 'policy', keywords: ['probation period', 'three months'] },
+      { slug: 'referral-programme', title: 'Referral programme', kind: 'policy', keywords: ['refer a friend', 'referral bonus', "finder's fee"] },
+      { slug: 'probation', title: 'Probation', kind: 'policy', keywords: ['probation period'] },
       { slug: 'leaving-half-dome', title: 'Leaving Half Dome', kind: 'guide', keywords: ['offboarding', 'resignation', 'resign', 'notice period', 'exit'] },
     ],
   },
@@ -182,13 +187,14 @@ export const topics: HubTopic[] = [
     summary: 'Looking after your mind, your body and the people you love.',
     icon: 'mental-health',
     pages: [
-      { slug: 'employee-assistance-program', title: 'Employee Assistance Program', kind: 'guide', keywords: ['eap', 'counselling', 'confidential support', 'mental health'] },
-      { slug: 'mental-health-at-work', title: 'Mental health at work', kind: 'guide', keywords: ['stress', 'burnout', 'wellbeing'] },
-      { slug: 'parental-leave', title: 'Parental leave', kind: 'policy', keywords: ['maternity', 'paternity', 'primary carer', 'secondary carer', 'baby', 'adoption'] },
+      { slug: 'uprise', title: 'Uprise: confidential support and coaching', kind: 'guide', source: 'remunerationPolicy', keywords: ['eap', 'employee assistance program', 'counselling', 'mental health'] },
+      { slug: 'mental-health-first-aid', title: 'Mental Health First Aid', kind: 'guide', source: 'mentalHealthFirstAidGuide', keywords: ['mhfa', 'first aiders', 'support'] },
+      { slug: 'wellbeing-at-half-dome', title: 'Wellbeing at Half Dome', kind: 'guide', source: 'wellbeingGuide', keywords: ['stress', 'burnout', 'wellbeing'] },
+      { slug: 'parental-leave', title: 'Parental leave', kind: 'policy', source: 'parentalLeaveGuide', keywords: ['maternity', 'paternity', 'primary carer', 'secondary carer', 'baby', 'adoption'] },
       { slug: 'reproductive-health-and-wellbeing', title: 'Reproductive health and wellbeing', kind: 'policy', keywords: ['fertility', 'ivf', 'menopause', 'periods', 'pregnancy loss'] },
-      { slug: 'family-and-domestic-violence-support', title: 'Family and domestic violence support', kind: 'policy', keywords: ['fdv leave', 'safety', 'domestic violence leave'] },
+      { slug: 'family-and-domestic-violence-support', title: 'Family and domestic violence support', kind: 'policy', source: 'leavePolicy', keywords: ['fdv leave', 'safety', 'domestic violence leave'] },
       { slug: 'health-and-safety', title: 'Health and safety', kind: 'policy', keywords: ['ohs', 'whs', 'injury', 'first aid', 'incident report'] },
-      { slug: 'team-pulse-surveys', title: 'Team pulse surveys', kind: 'guide', keywords: ['engagement survey', 'feedback survey'] },
+      { slug: 'team-pulse-surveys', title: 'Team pulse surveys', kind: 'guide', keywords: ['engagement survey', 'feedback survey', 'great place to work'] },
     ],
   },
   {
@@ -197,7 +203,7 @@ export const topics: HubTopic[] = [
     summary: 'The rules of the road, written in plain English.',
     icon: 'checklist',
     pages: [
-      { slug: 'code-of-conduct', title: 'Code of conduct', kind: 'policy', keywords: ['behaviour', 'conduct', 'ethics'] },
+      { slug: 'code-of-conduct', title: 'Code of conduct', kind: 'policy', source: 'codeOfConduct', keywords: ['behaviour', 'conduct', 'ethics'] },
       { slug: 'equal-opportunity', title: 'Equal opportunity and anti-discrimination', kind: 'policy', keywords: ['discrimination', 'eeo', 'fairness'] },
       { slug: 'respect-at-work', title: 'Bullying and harassment', kind: 'policy', keywords: ['respect at work', 'sexual harassment', 'bullying'] },
       { slug: 'raising-a-concern', title: 'Raising a concern', kind: 'policy', keywords: ['grievance', 'complaint', 'issue'] },
@@ -215,10 +221,10 @@ export const topics: HubTopic[] = [
     pages: [
       { slug: 'our-commitment', title: 'Our commitment', kind: 'guide', keywords: ['dei', 'd&i', 'diversity', 'inclusion'] },
       { slug: 'belonging-at-half-dome', title: 'Belonging at Half Dome', kind: 'guide', keywords: ['belonging', 'community', 'employee groups'] },
-      { slug: 'gender-pay-gap', title: 'Gender pay gap', kind: 'guide', keywords: ['wgea', 'equal pay', 'pay equity'] },
+      { slug: 'pay-equity', title: 'Pay equity', kind: 'guide', source: 'remunerationPolicy', keywords: ['gender pay gap', 'wgea', 'equal pay', 'pay audit'] },
       { slug: 'acknowledgement-of-country', title: 'Acknowledgement of Country', kind: 'guide', keywords: ['first nations', 'reconciliation', 'aboriginal', 'torres strait islander', 'wurundjeri'] },
       { slug: 'accessibility-and-adjustments', title: 'Accessibility and adjustments', kind: 'policy', keywords: ['disability', 'reasonable adjustments', 'neurodiversity'] },
-      { slug: 'cultural-and-religious-leave', title: 'Cultural and religious leave', kind: 'policy', keywords: ['cultural leave', 'religious holidays', 'swap a public holiday'] },
+      { slug: 'cultural-and-religious-leave', title: 'Cultural and religious leave', kind: 'policy', source: 'leavePolicy', keywords: ['cultural leave', 'religious holidays', 'ceremonial', 'swap a public holiday'] },
     ],
   },
 ];
@@ -226,15 +232,15 @@ export const topics: HubTopic[] = [
 /** Shortcuts to the pages people open most. Each one points at a page above. */
 export const quickLinks: { label: string; topic: string; page: string }[] = [
   { label: 'Apply for leave', topic: 'leave-and-flexibility', page: 'how-to-apply-for-leave' },
-  { label: 'Payroll dates', topic: 'pay-and-recognition', page: 'payroll-dates-and-payslips' },
+  { label: 'Whole Potential Days', topic: 'leave-and-flexibility', page: 'whole-potential-days' },
+  { label: 'The Three Keys', topic: 'benefits-and-perks', page: 'the-three-keys' },
   { label: 'Claim an expense', topic: 'pay-and-recognition', page: 'expenses-and-reimbursements' },
   { label: 'Org chart', topic: 'our-team', page: 'org-chart' },
-  { label: 'Public holidays', topic: 'leave-and-flexibility', page: 'public-holidays-in-victoria' },
-  { label: 'Confidential support', topic: 'wellbeing-and-support', page: 'employee-assistance-program' },
+  { label: 'Confidential support', topic: 'wellbeing-and-support', page: 'uprise' },
 ];
 
 /** Suggested searches shown under the search field. */
-export const popularSearches = ['Annual leave', 'Parental leave', 'Payday', 'Super', 'Learning budget'];
+export const popularSearches = ['Whole Potential Days', 'Annual leave', 'Parental leave', 'Three Keys', 'Uprise'];
 
 export const pageCount = topics.reduce((total, topic) => total + topic.pages.length, 0);
 
