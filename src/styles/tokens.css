@@ -1,0 +1,70 @@
+/* Half Dome design tokens (tokens.json v2, mirrored). Light first, dark redefines. */
+:root {
+  --sequoia: #8e1c02;
+  --camas: #b0a3d0;
+  --white-fir: #d2c663;
+  --snow: #f7f6f5;
+  --black-oak: #0f0f0f;
+  --white: #ffffff;
+
+  --surface: var(--white);
+  --surface-alt: var(--snow);
+  --ink: var(--black-oak);
+  --ink-muted: rgba(15, 15, 15, 0.72);
+  --accent: var(--sequoia);
+  --on-accent: var(--snow);
+  --hairline: rgba(15, 15, 15, 0.16);
+  --focus-ring: var(--sequoia);
+
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-serif: 'Libre Baskerville', Georgia, serif;
+
+  --space-0: 0px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+
+  --radius-none: 0px;
+  --radius-sm: 4px;
+  --radius-md: 12px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  --stroke-hairline: 1px;
+  --stroke-outline: 2px;
+  --shadow-none: none;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --surface: var(--black-oak);
+    --surface-alt: #1c1b1a;
+    --ink: var(--snow);
+    --ink-muted: rgba(247, 246, 245, 0.72);
+    --accent: var(--white-fir);
+    --on-accent: var(--black-oak);
+    --hairline: rgba(247, 246, 245, 0.2);
+    --focus-ring: var(--white-fir);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --surface: var(--black-oak);
+  --surface-alt: #1c1b1a;
+  --ink: var(--snow);
+  --ink-muted: rgba(247, 246, 245, 0.72);
+  --accent: var(--white-fir);
+  --on-accent: var(--black-oak);
+  --hairline: rgba(247, 246, 245, 0.2);
+  --focus-ring: var(--white-fir);
+  color-scheme: dark;
+}

@@ -1,0 +1,104 @@
+/* Shared Half Dome component styles (from the design system bundle). */
+.hd-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: 44px;
+  padding: 0 var(--space-6);
+  border: var(--stroke-outline) solid transparent;
+  border-radius: var(--radius-pill);
+  font: 600 15px/1 var(--font-sans);
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: filter 0.15s, background-color 0.15s;
+}
+.hd-btn-primary {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.hd-btn-secondary {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--ink);
+}
+.hd-btn-quiet {
+  background: transparent;
+  color: var(--accent);
+  padding: 0 var(--space-2);
+}
+.hd-btn:hover {
+  filter: brightness(1.08);
+}
+.hd-btn-sm {
+  height: 36px;
+  padding: 0 var(--space-4);
+  font-size: 14px;
+}
+
+.hd-pill {
+  display: inline-block;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-pill);
+  font: 700 11px/20px var(--font-sans);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.hd-pill-neutral {
+  background: var(--surface-alt);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--hairline);
+}
+
+.hd-eyebrow {
+  font: 700 13px/16px var(--font-sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.hd-h2 {
+  font: 700 28px/36px var(--font-sans);
+}
+.hd-h3 {
+  font: 600 22px/30px var(--font-sans);
+}
+.hd-intro {
+  font: 400 18px/28px var(--font-sans);
+  color: var(--ink-muted);
+}
+.hd-statement {
+  font: 800 72px/1 var(--font-sans);
+  letter-spacing: -0.02em;
+}
+
+.hd-logo {
+  display: block;
+  width: auto;
+}
+.hd-arrow {
+  display: block;
+  height: auto;
+  pointer-events: none;
+}
+.hd-tagline {
+  display: block;
+  width: auto;
+}
+
+.skip-link {
+  position: absolute;
+  top: -64px;
+  left: 16px;
+  z-index: 100;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+.skip-link:focus {
+  top: calc(env(safe-area-inset-top, 0px) + 12px);
+}
