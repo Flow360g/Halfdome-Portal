@@ -1,4 +1,48 @@
-# Half Dome People Hub
+# Half Dome portal
+
+The internal Half Dome portal: a shared shell with a collapsible side nav, and the pages inside it.
+
+| Page | Route | What it is |
+| --- | --- | --- |
+| People hub | `/`, `/topics/...` | Policies, pay, leave, learning and how we work |
+| Agency calendar | `/calendar` | Every 2026 date and rhythm from the People and Culture agency calendar |
+
+## Run it
+
+```bash
+npm install
+npm run dev            # local dev server
+npm test               # unit tests (date logic)
+npm run build          # content index, typecheck and production build to dist/
+npm run build:preview  # one self-contained HTML file at dist-artifact/people-hub.html (see below)
+```
+
+Copy `.env.example` to `.env.local` to connect Supabase. Without it, feedback stays in the browser and Ask the hub is hidden.
+
+## The portal shell
+
+- `src/shell/AppShell.tsx` lays out the side nav, with a top bar and slide-out drawer below 960px. Press `[` to collapse the nav.
+- `src/shell/SideNav.tsx` renders the logo, the pages and the Today card. The wordmark is three slices (`src/assets/shell/logo-*`), so collapsing folds it into the dome.
+- `src/shell/navItems.ts` lists the pages. Add a new page there and as a route in `src/App.tsx`.
+- `src/styles/shell.css` holds the shell styles. `--shell-bar` is the phone top bar's height; page-level sticky bars sit below it.
+
+To build a preview that opens on a particular page:
+
+```bash
+VITE_PREVIEW_ROUTE=/calendar PREVIEW_FILE=agency-calendar.html PREVIEW_TITLE="Half Dome Agency Calendar" npm run build:preview
+```
+
+## Agency calendar
+
+- `src/content/agencyCalendar.ts`: every date from *Half Dome - Agency Calender 2026* (People & Culture SharePoint), plus the milestone descriptions. Edit dates here. Public holidays use the official Victorian dates.
+- `src/calendar/`: date maths (`dates.ts`), the derived model (`model.ts`) and the components: hero with the next day off, filters and search, coming up, the year strip, month, year and agenda views, the detail drawer and the rhythm guide.
+- `src/styles/calendar.css`: calendar styles. Kinds of dates follow the brand chart order (Sequoia, Black Oak, Camas, White Fir, outline), and office-closed days are hatched.
+
+Trimesters follow the agency calendar across the portal: Trimester 1 runs July to October, Trimester 2 November to February and Trimester 3 March to June.
+
+Calendar shortcuts: `/` search, `T` today, `M` / `Y` / `A` switch views, arrow keys change month, `Esc` closes the drawer.
+
+## People hub
 
 The home for everything people and culture at Half Dome: policies, pay, leave, learning and how we work, in one place.
 
@@ -12,19 +56,7 @@ What's here so far:
 
 Pages without content yet show a holding page that links to the original SharePoint document where there is one.
 
-## Run it
-
-```bash
-npm install
-npm run dev            # local dev server
-npm test               # unit tests (date logic)
-npm run build          # content index, typecheck and production build to dist/
-npm run build:preview  # one self-contained HTML file at dist-artifact/people-hub.html
-```
-
-Copy `.env.example` to `.env.local` to connect Supabase. Without it, feedback stays in the browser and Ask the hub is hidden.
-
-## Writing a page
+### Writing a page
 
 1. Make sure the page is listed in `src/content/hub.ts` (topic, title, kind, keywords and its SharePoint `source`).
 2. Add `src/content/pages/<topic>/<page>.mdx`:
@@ -71,7 +103,7 @@ Blocks you can use without importing anything:
 
 Write in Australian English, sentence case, and don't use em dashes.
 
-## Where things live
+### Where things live
 
 | Path | What it is |
 | --- | --- |
@@ -90,7 +122,7 @@ Write in Australian English, sentence case, and don't use em dashes.
 | `supabase/functions/ask-hub/` | The Ask the hub function (OpenRouter). |
 | `supabase/migrations/` | The `page_feedback` table. |
 
-## Ask the hub and feedback (Supabase)
+### Ask the hub and feedback (Supabase)
 
 ### Live setup
 
@@ -119,7 +151,7 @@ The assistant's rules live in `src/content/ask-hub-instructions.ts`. It answers 
 
 Before the hub is shared beyond a private preview, put it behind Microsoft sign-in and require a signed-in user on the function. Pages include the salary brackets and internal policies.
 
-## Design
+### Design
 
 The hub is built on the Half Dome design system:
 

@@ -83,18 +83,30 @@ export interface Trimester {
 }
 
 /**
- * The trimester a date falls in. Assumes calendar trimesters (January to
- * April, May to August, September to December) until People and Culture
- * confirms the dates Half Dome uses.
+ * The trimester a date falls in, as set in the agency calendar (People and
+ * Culture SharePoint): Trimester 1 runs July to October, Trimester 2 November
+ * to February and Trimester 3 March to June.
  */
 export function trimesterFor(iso: string): Trimester {
   const date = parseDate(iso);
-  const year = date.getUTCFullYear();
-  const index = Math.floor(date.getUTCMonth() / 4);
-  const startMonth = index * 4;
+  const month = date.getUTCMonth();
+  let year = date.getUTCFullYear();
+  let number: 1 | 2 | 3;
+  let startMonth: number;
+  if (month >= 6 && month <= 9) {
+    number = 1;
+    startMonth = 6;
+  } else if (month >= 2 && month <= 5) {
+    number = 3;
+    startMonth = 2;
+  } else {
+    number = 2;
+    startMonth = 10;
+    if (month <= 1) year -= 1;
+  }
   const start = toISO(new Date(Date.UTC(year, startMonth, 1)));
   const end = toISO(new Date(Date.UTC(year, startMonth + 4, 0)));
-  return { number: (index + 1) as 1 | 2 | 3, start, end };
+  return { number, start, end };
 }
 
 const longFormat = new Intl.DateTimeFormat('en-AU', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' });

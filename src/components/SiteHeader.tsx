@@ -1,15 +1,13 @@
 import { Link } from 'react-router-dom';
 import { askHubConfigured } from '../lib/askHub';
 import { AskHubButton } from './AskHub';
-import { Logo } from './brand/Logo';
 
 export function SiteHeader() {
   return (
     <header className="site-header">
       <div className="container site-header__inner">
+        {/* The portal side nav carries the Half Dome logo, so the hub's bar just names the hub. */}
         <Link to="/" className="site-header__brand" aria-label="People hub home">
-          <Logo height={24} />
-          <span className="site-header__divider" aria-hidden="true" />
           <span className="site-header__name">People hub</span>
         </Link>
         <nav className="site-header__nav" aria-label="Main">

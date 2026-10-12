@@ -233,8 +233,8 @@ export function WholePotentialDays() {
       </div>
       <p className="tool__fineprint">
         Tap a day to mark it booked. This is just for you and stays on this device; HiBob is the official record.
-        Trimester dates are assumed to be January to April, May to August and September to December until People and
-        Culture confirms them. <Link to={pagePath('leave-and-flexibility', 'how-to-apply-for-leave')}>How to request one</Link>.
+        Trimesters follow the <Link to="/calendar">agency calendar</Link>.{' '}
+        <Link to={pagePath('leave-and-flexibility', 'how-to-apply-for-leave')}>How to request one</Link>.
       </p>
     </section>
   );

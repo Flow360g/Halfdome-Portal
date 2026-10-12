@@ -66,16 +66,21 @@ describe('nextHoliday', () => {
 });
 
 describe('trimesterFor', () => {
-  it('places October in the third trimester', () => {
-    expect(trimesterFor('2026-10-12')).toEqual({ number: 3, start: '2026-09-01', end: '2026-12-31' });
+  it('places October in the first trimester', () => {
+    expect(trimesterFor('2026-10-12')).toEqual({ number: 1, start: '2026-07-01', end: '2026-10-31' });
   });
 
-  it('places April in the first trimester', () => {
-    expect(trimesterFor('2027-04-30')).toEqual({ number: 1, start: '2027-01-01', end: '2027-04-30' });
+  it('runs the second trimester across the new year', () => {
+    expect(trimesterFor('2026-11-01')).toEqual({ number: 2, start: '2026-11-01', end: '2027-02-28' });
+    expect(trimesterFor('2027-01-15')).toEqual({ number: 2, start: '2026-11-01', end: '2027-02-28' });
   });
 
-  it('places May in the second trimester', () => {
-    expect(trimesterFor('2027-05-01').number).toBe(2);
+  it('ends a leap-year second trimester on 29 February', () => {
+    expect(trimesterFor('2028-02-29').end).toBe('2028-02-29');
+  });
+
+  it('places April in the third trimester', () => {
+    expect(trimesterFor('2027-04-30')).toEqual({ number: 3, start: '2027-03-01', end: '2027-06-30' });
   });
 });
 

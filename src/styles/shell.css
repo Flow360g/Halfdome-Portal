@@ -1,0 +1,602 @@
+/*
+ * Portal shell: collapsible side nav (rail) on wide screens, top bar and drawer below 960px.
+ * The wordmark is three slices; collapsing slides "halfd" and "me" away and the dome
+ * grows into the rail's mark.
+ */
+
+:root {
+  --shell-bar: 0px;
+  --nav-w-open: 280px;
+  --nav-w-closed: 88px;
+  --nav-pad: 16px;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --icon-tile: var(--snow);
+}
+
+/* Theme-swapped brand images (see ThemeImg). */
+:root .theme-dark {
+  display: none;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .theme-light {
+    display: none;
+  }
+  :root:not([data-theme='light']) .theme-dark {
+    display: block;
+  }
+}
+:root[data-theme='dark'] .theme-light {
+  display: none;
+}
+:root[data-theme='dark'] .theme-dark {
+  display: block;
+}
+
+.shell {
+  --nav-w: var(--nav-w-open);
+  display: grid;
+  grid-template-columns: var(--nav-w) minmax(0, 1fr);
+  min-height: 100vh;
+  transition: grid-template-columns 0.48s var(--ease-out);
+}
+.shell[data-collapsed='true'] {
+  --nav-w: var(--nav-w-closed);
+}
+
+.shell__rail {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  height: 100vh;
+  height: 100dvh;
+}
+
+.shell__main {
+  min-width: 0;
+  outline: none;
+}
+
+/* ---------- Side nav ---------- */
+
+.sidenav {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: calc(var(--space-6) + env(safe-area-inset-top, 0px)) var(--nav-pad)
+    calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
+  background: var(--surface-alt);
+  border-right: var(--stroke-hairline) solid var(--hairline);
+}
+
+.sidenav__brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  margin-bottom: var(--space-8);
+  padding-left: 8px;
+}
+
+.brandmark {
+  display: block;
+  border-radius: var(--radius-sm);
+}
+
+/* 671 x 120 source, shown 30px high. Slices: halfd 0-340, dome 340-431, me 431-671. */
+.brandmark__logo {
+  position: relative;
+  display: block;
+  width: 168px;
+  height: 30px;
+}
+.brandmark__part {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transition:
+    transform 0.48s var(--ease-out),
+    opacity 0.32s var(--ease-out);
+}
+.brandmark__part img {
+  width: 100%;
+  height: 100%;
+}
+.brandmark__part--left {
+  left: 0;
+  width: 50.67%;
+}
+.brandmark__part--dome {
+  left: 50.67%;
+  width: 13.56%;
+  transform-origin: 50% 47%;
+}
+.brandmark__part--right {
+  left: 64.23%;
+  width: 35.77%;
+}
+.brandmark:hover .brandmark__part--dome {
+  transform: translateY(-2px);
+}
+
+/* Collapsed: the dome (centre 96.5px into the logo) moves to the middle of the rail. */
+.sidenav[data-collapsed='true'] .brandmark__part--left {
+  transform: translateX(-18px);
+  opacity: 0;
+}
+.sidenav[data-collapsed='true'] .brandmark__part--right {
+  transform: translateX(18px);
+  opacity: 0;
+}
+.sidenav[data-collapsed='true'] .brandmark__part--dome {
+  transform: translateX(calc(var(--nav-w-closed) / 2 - var(--nav-pad) - 8px - 96.5px)) scale(1.9);
+}
+.sidenav[data-collapsed='true'] .brandmark:hover .brandmark__part--dome {
+  transform: translateX(calc(var(--nav-w-closed) / 2 - var(--nav-pad) - 8px - 96.5px)) translateY(-2px) scale(2.05);
+}
+
+.sidenav__label {
+  margin: 0 0 var(--space-2) 12px;
+  font: 700 12px/16px var(--font-sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  transition: opacity 0.2s;
+}
+
+.sidenav__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sidenav__list li {
+  animation: nav-in 0.6s var(--ease-out) both;
+  animation-delay: calc(0.12s + var(--i) * 0.07s);
+}
+@keyframes nav-in {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+}
+
+.navitem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 64px;
+  padding: var(--space-1) 36px var(--space-1) 4px;
+  border: var(--stroke-hairline) solid transparent;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--ink);
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
+}
+.navitem:hover {
+  background: var(--surface);
+}
+.navitem.active {
+  background: var(--surface);
+  border-color: var(--hairline);
+}
+
+.navitem__icon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  background: var(--icon-tile);
+  transition: transform 0.35s var(--ease-spring);
+}
+.navitem__icon img {
+  width: 48px;
+  height: 48px;
+}
+.navitem:hover .navitem__icon {
+  transform: rotate(-6deg) scale(1.06);
+}
+
+.navitem__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  transition:
+    opacity 0.2s,
+    transform 0.3s var(--ease-out);
+}
+.navitem__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font: 700 15px/20px var(--font-sans);
+  white-space: nowrap;
+}
+.navitem__meta {
+  overflow: hidden;
+  font: 500 12.5px/18px var(--font-sans);
+  color: var(--ink-muted);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.navitem__external {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.6;
+}
+
+/* "You are here": the dome sits beside the current page. */
+.navitem__here {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  width: 20px;
+  opacity: 0;
+  transform: translateY(-50%) translateY(6px) scale(0.6);
+  transition:
+    opacity 0.25s,
+    transform 0.45s var(--ease-spring);
+}
+.navitem.active .navitem__here {
+  opacity: 1;
+  transform: translateY(-50%);
+}
+
+.sidenav__spacer {
+  flex: 1;
+  min-height: var(--space-6);
+}
+
+/* Today card */
+.navtoday {
+  display: block;
+  margin-bottom: var(--space-3);
+  padding: var(--space-4);
+  border: var(--stroke-hairline) solid var(--hairline);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color 0.2s;
+}
+.navtoday:hover {
+  border-color: var(--ink);
+}
+.navtoday__full {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.navtoday__eyebrow {
+  font: 700 12px/16px var(--font-sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.navtoday__date {
+  font: 700 18px/24px var(--font-sans);
+  white-space: nowrap;
+}
+.navtoday__meta {
+  font: 500 13px/18px var(--font-sans);
+  color: var(--ink-muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.navtoday__bar {
+  position: relative;
+  height: 6px;
+  margin-top: var(--space-3);
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--hairline);
+}
+.navtoday__bar span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background: var(--accent);
+  animation: bar-grow 1.4s 0.4s var(--ease-out) both;
+  transform-origin: left;
+}
+@keyframes bar-grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+.navtoday__caption {
+  margin-top: 6px;
+  font: 500 12px/16px var(--font-sans);
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+.navtoday__mini {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+.navtoday__mini-label {
+  font: 700 10px/12px var(--font-sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.navtoday__mini-week {
+  font: 800 20px/24px var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Collapse toggle */
+.sidenav__toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--ink-muted);
+  font: 600 14px/20px var(--font-sans);
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+.sidenav__toggle:hover {
+  background: var(--surface);
+  color: var(--ink);
+}
+.sidenav__toggle svg {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.sidenav__toggle-chevron {
+  transform-origin: 18.5px 12px;
+  transition: transform 0.45s var(--ease-out);
+}
+.sidenav[data-collapsed='true'] .sidenav__toggle-chevron {
+  transform: rotate(180deg);
+}
+.sidenav__toggle-text {
+  white-space: nowrap;
+  transition: opacity 0.2s;
+}
+.sidenav__kbd {
+  margin-left: auto;
+  min-width: 22px;
+  padding: 0 6px;
+  border: var(--stroke-hairline) solid var(--hairline);
+  border-radius: var(--radius-sm);
+  font: 600 12px/20px var(--font-sans);
+  text-align: center;
+  transition: opacity 0.2s;
+}
+
+.sidenav__close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+.sidenav__close:hover {
+  background: var(--surface);
+}
+.sidenav__close svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.25;
+  stroke-linecap: round;
+}
+
+/* Collapsed rail */
+.sidenav[data-collapsed='true'] .sidenav__label,
+.sidenav[data-collapsed='true'] .navitem__text,
+.sidenav[data-collapsed='true'] .sidenav__toggle-text,
+.sidenav[data-collapsed='true'] .sidenav__kbd {
+  opacity: 0;
+  pointer-events: none;
+}
+.sidenav[data-collapsed='true'] .navitem__text {
+  transform: translateX(-8px);
+}
+.sidenav[data-collapsed='true'] .navitem {
+  padding-left: 2px;
+}
+.sidenav[data-collapsed='true'] .navitem__here {
+  opacity: 0;
+}
+.sidenav[data-collapsed='true'] .navtoday {
+  display: grid;
+  place-items: center;
+  padding: var(--space-3) 0;
+}
+.sidenav[data-collapsed='true'] .navtoday__full {
+  display: none;
+}
+.sidenav[data-collapsed='true'] .navtoday__mini {
+  display: flex;
+}
+.sidenav[data-collapsed='true'] .sidenav__toggle {
+  padding: 0 calc((var(--nav-w-closed) - 2 * var(--nav-pad) - 22px) / 2);
+}
+
+/* Tooltips for the collapsed rail */
+.sidenav[data-collapsed='true'] [data-tip] {
+  position: relative;
+}
+.sidenav[data-collapsed='true'] [data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 14px);
+  z-index: 5;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--ink);
+  color: var(--surface);
+  font: 600 13px/18px var(--font-sans);
+  white-space: pre;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-6px, -50%);
+  transition:
+    opacity 0.15s,
+    transform 0.2s var(--ease-out);
+}
+.sidenav[data-collapsed='true'] [data-tip]:hover::after,
+.sidenav[data-collapsed='true'] [data-tip]:focus-visible::after {
+  opacity: 1;
+  transform: translate(0, -50%);
+}
+
+/* ---------- Top bar and drawer (small screens) ---------- */
+
+.topbar {
+  display: none;
+}
+.shell__drawer {
+  display: none;
+}
+
+/* Page-level sticky bars (the hub's header, the calendar filters) sit under the phone top bar. */
+.shell .site-header {
+  top: var(--shell-bar);
+}
+
+@media (width <= 960px) {
+  :root {
+    --shell-bar: 61px;
+  }
+  .shell,
+  .shell[data-collapsed='true'] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .shell__rail {
+    display: none;
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-height: 60px;
+    padding: env(safe-area-inset-top, 0px) clamp(8px, 3vw, 24px) 0;
+    background: var(--surface);
+    border-bottom: var(--stroke-hairline) solid var(--hairline);
+  }
+  .topbar__menu {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .topbar__menu:hover {
+    background: var(--surface-alt);
+  }
+  .topbar__menu svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.25;
+    stroke-linecap: round;
+  }
+  .topbar__logo {
+    border-radius: var(--radius-sm);
+  }
+  .topbar__logo-slices {
+    display: flex;
+    height: 24px;
+  }
+  .topbar__logo-slices img {
+    height: 24px;
+    width: auto;
+  }
+
+  .shell__drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: block;
+    pointer-events: none;
+  }
+  .shell__drawer[data-open='true'] {
+    pointer-events: auto;
+  }
+  .shell__scrim {
+    position: absolute;
+    inset: 0;
+    border: 0;
+    background: rgba(15, 15, 15, 0.42);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .shell__drawer[data-open='true'] .shell__scrim {
+    opacity: 1;
+  }
+  .shell__drawer-panel {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: min(320px, 86vw);
+    transform: translateX(-102%);
+    transition: transform 0.42s var(--ease-out);
+  }
+  .shell__drawer[data-open='true'] .shell__drawer-panel {
+    transform: none;
+  }
+  .shell__drawer-panel .sidenav {
+    border-right: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidenav__list li,
+  .navtoday__bar span {
+    animation: none;
+  }
+}
+
+/* On phones the shell's top bar already names the portal; the hub's bar only stays if it carries Ask the hub. */
+@media (width <= 600px) {
+  .shell .site-header:not(:has(.site-header__ask)) {
+    display: none;
+  }
+}
