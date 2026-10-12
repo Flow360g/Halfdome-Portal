@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "content": "node scripts/build-content-index.mjs",
     "dev": "npm run content && vite",

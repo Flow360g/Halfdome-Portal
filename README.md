@@ -19,6 +19,18 @@ npm run build:preview  # one self-contained HTML file at dist-artifact/people-hu
 
 Copy `.env.example` to `.env.local` to connect Supabase. Without it, feedback stays in the browser and Ask the hub is hidden.
 
+## Deploy on Vercel
+
+`vercel.json` holds the settings: a Vite build with `npm run build` to `dist/`, and a rewrite that sends every route to `index.html` so links like `/calendar` work when opened directly. `package.json` pins Node 22, which the content index script needs.
+
+To set it up once:
+
+1. In Vercel, go to Add New › Project and import `Flow360g/Halfdome-Portal`. Give the Vercel GitHub app access to the repo if it asks.
+2. Leave the build settings as they are and click Deploy. Production builds from the default branch, and every other branch gets a preview link.
+3. Before sharing the link, turn on Settings › Deployment Protection for production. The portal shows internal policies and pay information, and Ask the hub spends OpenRouter credit.
+
+`.env.production` already holds the Supabase URL and public key, so there are no environment variables to add in Vercel. Feedback from the Vercel site goes to the live `page_feedback` table.
+
 ## The portal shell
 
 - `src/shell/AppShell.tsx` lays out the side nav, with a top bar and slide-out drawer below 960px. Press `[` to collapse the nav.
@@ -124,7 +136,7 @@ Write in Australian English, sentence case, and don't use em dashes.
 
 ### Ask the hub and feedback (Supabase)
 
-### Live setup
+#### Live setup
 
 The hub uses the **Halfdome-Portal** Supabase project (ref `zvsvusemusdrgesebrsu`, Sydney).
 
@@ -140,7 +152,7 @@ The function needs two secrets, set in the dashboard under Edge Functions › Se
 
 After changing hub pages, run `npm run content`, then redeploy the function with `supabase functions deploy ask-hub`. The function reads its content from `supabase/functions/ask-hub/content.json`.
 
-### Setting up a new project from scratch
+#### Setting up a new project from scratch
 
 1. Apply `supabase/migrations/*_page_feedback.sql`.
 2. Set the secrets above.
