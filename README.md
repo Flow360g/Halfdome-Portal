@@ -92,13 +92,28 @@ Write in Australian English, sentence case, and don't use em dashes.
 
 ## Ask the hub and feedback (Supabase)
 
-1. Apply `supabase/migrations/*_page_feedback.sql`. Anyone can add feedback; nobody can read it through the public API. People and Culture reads it in the Supabase dashboard.
-2. Set the function's secrets:
-   - `OPENROUTER_API_KEY`
-   - `OPENROUTER_MODEL`, the OpenRouter model slug (for example a Claude Sonnet model)
-   - `ALLOWED_ORIGINS`, the hub's address
+### Live setup
+
+The hub uses the **Halfdome-Portal** Supabase project (ref `zvsvusemusdrgesebrsu`, Sydney).
+
+- **Feedback:** the `page_feedback` table. Anyone can add a response; nobody can read, change or delete responses through the public API. People and Culture reads them in the dashboard under Table editor › `page_feedback`.
+- **Ask the hub:** the `ask-hub` edge function. Every call needs the project's anon key.
+- **Settings:** `.env.production` holds the project URL and the public anon key, so production builds switch on Ask the hub and feedback. The single-file preview ignores it and uses Claude in the viewer.
+
+The function needs two secrets, set in the dashboard under Edge Functions › Secrets:
+
+- `OPENROUTER_API_KEY`: an OpenRouter key. Give it a monthly credit limit while the hub has no sign-in.
+- `OPENROUTER_MODEL`: an OpenRouter model slug, such as the latest Claude Sonnet from openrouter.ai/models.
+- Optional: `ALLOWED_ORIGINS`, the hub's web address once it has one.
+
+After changing hub pages, run `npm run content`, then redeploy the function with `supabase functions deploy ask-hub`. The function reads its content from `supabase/functions/ask-hub/content.json`.
+
+### Setting up a new project from scratch
+
+1. Apply `supabase/migrations/*_page_feedback.sql`.
+2. Set the secrets above.
 3. Deploy the function: `supabase functions deploy ask-hub`.
-4. Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` for the hub build.
+4. Put the project URL and anon key in `.env.production`.
 
 The assistant's rules live in `src/content/ask-hub-instructions.ts`. It answers only from hub content, cites its sources, never guesses entitlements and points to HiBob or People and Culture for anything personal.
 
